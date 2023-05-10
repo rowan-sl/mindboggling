@@ -3,5 +3,30 @@
 version = 3
 
 [[package]]
+name = "cfg-if"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
+
+[[package]]
+name = "libm"
+version = "0.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7fc7aa29613bd6a620df431842069224d8bc9011086b1db4c0e0cd47fa03ec9a"
+
+[[package]]
 name = "mindboggling"
 version = "0.1.0"
+dependencies = [
+ "packed_simd",
+]
+
+[[package]]
+name = "packed_simd"
+version = "0.3.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6cf965495ba3190af4c54375cb7d5d4777954457a215035a783f9aec5380b19f"
+dependencies = [
+ "cfg-if",
+ "libm",
+]
