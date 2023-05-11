@@ -57,8 +57,8 @@ fn main() {
                     let range: f64 = range.parse().unwrap();
                     let dispersion: f64 = dispersion.parse().unwrap();
                     // -- filters --
-                    // freq cutoff, boggle does not allow 2 letter words
-                    if (freq < 50.0 && range < 30.0) || word.len() <= 2 {
+                    // freq cutoff
+                    if freq < 50.0 && range < 30.0 {
                         None?
                     }
                     Some((word, part_of_speech, variant, freq, range, dispersion))
