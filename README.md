@@ -8,6 +8,7 @@ FORMAT: the format of the word list, either
 - bnc: designed to work with the [british national text corpus](https://ucrel.lancs.ac.uk/bncfreq/flists.html), spacifically [list 1.1 full list (download)](https://ucrel.lancs.ac.uk/bncfreq/lists/1_1_all_fullalpha.zip)
 - plain (RECOMMENDED): just a list of words, seperated by newlines
     - [this one](http://www.mieliestronk.com/corncob_lowercase.txt) seems like a good list to use
+    - collin's 2019 scrabble word list will also work (google it), you just may need to remove the first 2 lines of text
 RUST_LOG: the log level to use. set to info for normal use
 
 And the boggle board should be provided as a string as the first argument, as shown:
