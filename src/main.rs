@@ -1,12 +1,15 @@
-#[macro_use] extern crate log;
-use std::collections::{HashSet, HashMap};
+#[macro_use]
+extern crate log;
+use std::collections::{HashMap, HashSet};
 
 fn main() {
     pretty_env_logger::init_timed();
     //TODO: properly handle QU
     let board = Board::from_str(
         //"e o l o e e t o o o y k f d e qu f i s e o v e e s"
-        std::env::args().nth(1).expect("Pass the board (space seperated tile content) as the first argument")
+        std::env::args()
+            .nth(1)
+            .expect("Pass the board (space seperated tile content) as the first argument")
             .to_ascii_lowercase()
             .as_str(),
     )
@@ -84,7 +87,7 @@ fn main() {
                     // );
                     if !word.chars().all(|c| c.is_ascii_alphabetic()) {
                         println!("skip {word:?} reason NONALPHABETIC");
-                        return None
+                        return None;
                     }
                     Some(word.to_string())
                 })
@@ -95,6 +98,8 @@ fn main() {
 
     info!("parsed word list");
 
+    // note: this is stored using Box::leak. memory is never reclaimed,
+    // the OS does this for us when the program exits (when it would have been deallocated anyway)
     let list = WordPart::from_collection(&list_vec, false);
 
     #[allow(unused)]
@@ -170,7 +175,11 @@ fn main() {
                     previous_coords2.push((x2, y2));
                     if let Some(part) = part {
                         if part.completes_word {
-                            let again = if !found.insert(this.clone()) { "[repeat]" } else { "[new   ]" };
+                            let again = if !found.insert(this.clone()) {
+                                "[repeat]"
+                            } else {
+                                "[new   ]"
+                            };
                             if log_enabled!(log::Level::Trace) {
                                 debug!("{indent}      found word {this:?}\t{again} path {previous_coords2:?}");
                             } else {
@@ -200,26 +209,30 @@ fn main() {
     // -- count #letter words --
     let mut by_letters: HashMap<usize, usize> = Default::default();
     for word in found {
-    by_letters.entry(word.len()).and_modify(|x| *x += 1).or_insert(1);
-}
-let mut by_letters_vec = by_letters.into_iter().collect::<Vec<_>>();
-by_letters_vec.sort_by_key(|x| x.0);
-for (letters, ammnt) in &by_letters_vec {
-    info!("found {ammnt}\t{letters} letter words");
-}
-// -- calculate score --
-let mut score = 0usize;
-for (letters, amnt) in &by_letters_vec {
-    score += *amnt * (match letters {
-        0 | 1 | 2 => 0,
-        3 | 4 => 1,
-        5 => 2,
-        6 => 3,
-        7 => 5,
-        8 | _ => 11,
-    });
-}
-info!("score {score}");
+        by_letters
+            .entry(word.len())
+            .and_modify(|x| *x += 1)
+            .or_insert(1);
+    }
+    let mut by_letters_vec = by_letters.into_iter().collect::<Vec<_>>();
+    by_letters_vec.sort_by_key(|x| x.0);
+    for (letters, ammnt) in &by_letters_vec {
+        info!("found {ammnt}\t{letters} letter words");
+    }
+    // -- calculate score --
+    let mut score = 0usize;
+    for (letters, amnt) in &by_letters_vec {
+        score += *amnt
+            * (match letters {
+                0 | 1 | 2 => 0,
+                3 | 4 => 1,
+                5 => 2,
+                6 => 3,
+                7 => 5,
+                8 | _ => 11,
+            });
+    }
+    info!("score {score}");
 }
 
 //#[no_mangle]
