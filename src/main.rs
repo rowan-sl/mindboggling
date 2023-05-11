@@ -86,7 +86,7 @@ fn main() {
                     //     "{word:?}"
                     // );
                     if !word.chars().all(|c| c.is_ascii_alphabetic()) {
-                        println!("skip {word:?} reason NONALPHABETIC");
+                        warn!("skip {word:?} reason NONALPHABETIC");
                         return None;
                     }
                     Some(word.to_string())
